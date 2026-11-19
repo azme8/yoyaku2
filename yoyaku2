@@ -1,0 +1,2725 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>大同高校 軽音楽部 ポータル</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="軽音ポータル">
+  <meta name="theme-color" content="#ffffff">
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --radius: 8px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 12px;
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 70px;
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1.4;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+
+    p.subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 0 0 12px 0;
+    }
+
+    /* メインナビゲーションタブ */
+    .main-nav {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: var(--radius);
+    }
+
+    .btn-main-nav {
+      flex: 1;
+      padding: 8px 2px;
+      font-size: 11px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-main-nav.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* コントロールパネル */
+    .control-panel {
+      background: var(--surface);
+      padding: 12px;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-room {
+      flex: 1;
+      background: #f8fafc;
+      color: var(--text-muted);
+    }
+
+    .btn-room.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .room-edit-btn {
+      display: none;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 4px;
+    }
+    .admin-mode .room-edit-btn, .master-mode .room-edit-btn { display: inline-block; }
+
+    .btn-tab {
+      flex: 1;
+      background: #f8fafc;
+      color: var(--text-muted);
+    }
+    .btn-tab.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-admin {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+      border-color: #fecaca;
+    }
+
+    .btn-logout {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid var(--border);
+    }
+
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ルールバナー */
+    .rule-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius);
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: #166534;
+      line-height: 1.5;
+    }
+
+    /* テーブル */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 2px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    th {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    td.time-col {
+      background-color: #f8fafc;
+      font-weight: 600;
+      font-size: 10px;
+      text-align: left;
+      padding-left: 6px;
+      line-height: 1.3;
+      white-space: pre-line;
+      color: var(--text-muted);
+      position: relative;
+    }
+    .admin-mode td.time-col, .master-mode td.time-col {
+      background-color: var(--success-bg);
+      color: var(--success);
+      cursor: pointer;
+    }
+
+    .slot {
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .slot.free {
+      color: #cbd5e1;
+    }
+    .slot.booked {
+      background-color: var(--success-bg);
+      color: var(--success);
+      font-weight: 700;
+    }
+    .slot.booked-admin {
+      background-color: var(--danger-bg) !important;
+      color: var(--danger) !important;
+      font-weight: 700;
+    }
+
+    /* 組織図スタイル */
+    #orgView { display: none; }
+    .org-header-container {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .org-sub-en {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    .org-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .org-title-edit-btn {
+      display: none;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      font-size: 10px;
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+    .admin-mode .org-title-edit-btn, .master-mode .org-title-edit-btn { display: inline-block; }
+
+    .org-section-wrapper {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .org-section-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .section-delete-btn {
+      display: none;
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      font-size: 9px;
+      border-radius: 3px;
+    }
+    .admin-mode .section-delete-btn, .master-mode .section-delete-btn { display: inline-block; }
+
+    .org-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    @media(min-width: 600px) { .org-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width: 850px) { .org-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    .org-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .org-box-header {
+      font-size: 11px;
+      font-weight: 700;
+      background: #f8fafc;
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .org-box-content {
+      font-size: 11px;
+      white-space: pre-line;
+      padding: 8px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .org-box-content.small-text {
+      font-size: 10px;
+      text-align: left;
+      justify-content: flex-start;
+      color: var(--text-muted);
+    }
+    .box-btn-group {
+      display: none;
+      background: #f8fafc;
+      padding: 4px 6px;
+      border-top: 1px solid var(--border);
+      gap: 4px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .admin-mode .box-btn-group, .master-mode .box-btn-group { display: flex; }
+    .edit-btn { background: var(--primary); color: white; border: none; padding: 2px 6px; font-size: 9px; border-radius: 3px; }
+    .delete-btn { background: var(--danger); color: white; border: none; padding: 2px 6px; font-size: 9px; border-radius: 3px; }
+    .color-picker-input { -webkit-appearance: none; border: 1px solid var(--border); width: 20px; height: 20px; border-radius: 50%; cursor: pointer; padding: 0; background: none; }
+
+    .org-footer-note {
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-radius: var(--radius);
+      padding: 10px;
+      font-size: 10px;
+      color: #92400e;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    /* 管理者ツールバー */
+    .tab-admin-toolbar {
+      display: none;
+      background: var(--danger-bg);
+      border: 1px solid #fecaca;
+      padding: 10px;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+    .admin-mode .tab-admin-toolbar, .master-mode .tab-admin-toolbar { display: block; }
+
+    #adminLogSection {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+    .admin-mode #adminLogSection, .master-mode #adminLogSection { display: block; }
+    details summary { font-size: 11px; font-weight: 700; color: var(--danger); cursor: pointer; }
+
+    /* チャット */
+    #chatSection {
+      background: var(--surface);
+      padding: 12px;
+      border-radius: var(--radius);
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .chat-messages {
+      height: 140px;
+      overflow-y: auto;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+    .chat-msg { margin-bottom: 4px; border-bottom: 1px solid var(--border); padding-bottom: 3px; }
+
+    #chatNotificationBadge {
+      display: none;
+      position: absolute;
+      top: -8px;
+      right: 12px;
+      background: var(--danger);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 8px;
+    }
+
+    input[type="text"], input[type="password"], input[type="date"], select, textarea {
+      font-size: 16px !important;
+    }
+
+    /* モーダル */
+    .custom-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    .modal-content {
+      background: var(--surface);
+      padding: 16px;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .modal-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: block;
+    }
+    .modal-input, .modal-textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-top: 3px;
+      font-size: 13px;
+      background: #f8fafc;
+    }
+    .modal-textarea { height: 70px; resize: vertical; }
+    .modal-btn-group { display: flex; gap: 6px; margin-top: 12px; }
+
+    /* ログインモーダル専用デザイン（画像再現） */
+    .login-card {
+      background: #ffffff;
+      padding: 24px 20px 22px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 330px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .login-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #334155;
+      margin: 0 0 14px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #334155;
+      letter-spacing: 0.02em;
+    }
+    .login-card-desc {
+      font-size: 12px;
+      color: #475569;
+      margin: 0 0 14px 0;
+    }
+    .login-field-label {
+      display: block;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+    .login-field-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-sizing: border-box;
+      background: #ffffff;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .login-field-input::placeholder {
+      color: #94a3b8;
+    }
+    .btn-login-green {
+      width: 100%;
+      padding: 11px;
+      background-color: #43a047;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+    .btn-login-green:active {
+      background-color: #388e3c;
+    }
+    .login-notice-box {
+      background-color: #fef3c7;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      padding: 9px 11px;
+      margin-top: 14px;
+      text-align: left;
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.45;
+    }
+    .login-admin-divider {
+      border-top: 1px dashed #cbd5e1;
+      margin-top: 16px;
+      padding-top: 12px;
+    }
+    .login-admin-caption {
+      font-size: 11px;
+      font-weight: 700;
+      color: #b91c1c;
+      margin-bottom: 8px;
+    }
+    .btn-login-red {
+      width: 100%;
+      padding: 11px;
+      background-color: #d9381e;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-login-red:active {
+      background-color: #b91c1c;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      gap: 6px;
+    }
+
+    #contactBox {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      max-width: 180px;
+      cursor: pointer;
+    }
+    #contactBox b { display: block; font-size: 10px; margin-bottom: 2px; color: var(--primary); }
+    .admin-mode #contactBox, .master-mode #contactBox { border: 2px dashed var(--danger); }
+
+    .row-delete-btn {
+      display: none;
+      position: absolute;
+      top: 1px; right: 1px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 1px 3px;
+      font-size: 8px;
+      border-radius: 2px;
+    }
+    .admin-mode .row-delete-btn, .master-mode .row-delete-btn { display: inline-block; }
+
+    /* 活動状況・日程画面統合 */
+    #activityView { display: none; }
+    .term-date-banner {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .term-date-text { font-size: 11px; font-weight: 600; color: var(--text); }
+    .term-edit-btn {
+      display: none;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      font-size: 10px;
+      border-radius: 4px;
+    }
+    .admin-mode .term-edit-btn, .master-mode .term-edit-btn { display: inline-block; }
+
+    .activity-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stat-card {
+      background: var(--surface);
+      padding: 10px;
+      border-radius: var(--radius);
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .stat-card-value { font-size: 15px; font-weight: 700; color: var(--text); margin-top: 2px; }
+    .stat-card-label { font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+
+    .activity-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+    }
+    .activity-table th { background-color: #f8fafc; color: var(--text-muted); font-size: 10px; padding: 8px 4px; }
+    .activity-table td { font-size: 11px; padding: 8px 4px; border-bottom: 1px solid var(--border); }
+
+    .progress-bar-bg { width: 100%; background-color: #f1f5f9; border-radius: 3px; height: 5px; overflow: hidden; margin-top: 4px; }
+    .progress-bar-fill { height: 100%; background-color: var(--success); border-radius: 3px; }
+
+    .badge-active { background-color: var(--success-bg); color: var(--success); border: 1px solid #bbf7d0; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 600; }
+    .badge-normal { background-color: #f8fafc; color: var(--text-muted); border: 1px solid var(--border); padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 600; }
+    .badge-low { background-color: var(--danger-bg); color: var(--danger); border: 1px solid #fecaca; padding: 1px 6px; border-radius: 8px; font-size: 9px; font-weight: 600; }
+
+    .activity-admin-btn {
+      display: none;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      font-size: 9px;
+      border-radius: 4px;
+      margin-left: 2px;
+    }
+    .admin-mode .activity-admin-btn, .master-mode .activity-admin-btn { display: inline-block; }
+
+    /* イベントカード */
+    .event-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .event-date-badge {
+      display: inline-block;
+      background: #f1f5f9;
+      color: var(--text);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+    .event-cat-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 4px;
+      background: #f8fafc;
+      color: var(--text-muted);
+    }
+    .event-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 2px 0; }
+    .event-desc { font-size: 11px; color: var(--text-muted); white-space: pre-line; line-height: 1.4; }
+    .event-del-btn {
+      display: none;
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 3px 6px;
+      font-size: 9px;
+      border-radius: 4px;
+    }
+    .admin-mode .event-del-btn, .master-mode .event-del-btn { display: inline-block; }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body id="bodyRoot">
+
+  <header>
+    <h1>大同高校 軽音楽部 ポータル</h1>
+    <button class="btn btn-logout" onclick="logoutSession()">ログアウト</button>
+  </header>
+  <p class="subtitle" id="loginStatusSubtitle">ログイン状態: 未ログイン</p>
+
+  <div class="main-nav">
+    <button class="btn-main-nav active" id="navReservation" onclick="switchMainTab('reservation')">部室予約</button>
+    <button class="btn-main-nav" id="navActivity" onclick="switchMainTab('activity')">活動状況・日程</button>
+    <button class="btn-main-nav" id="navOrg" onclick="switchMainTab('org')">組織図</button>
+  </div>
+
+  <div id="adminLogSection">
+    <details>
+      <summary>⚙️ 管理者・操作履歴ログ（クリックして展開）</summary>
+      <div style="margin-top: 6px;">
+        <div class="flex-row" style="margin-bottom: 4px;">
+          <span style="font-size: 10px; color: var(--text-muted);">直近の操作履歴</span>
+          <button class="btn" style="padding: 2px 4px; font-size: 9px;" onclick="clearAdminLogs()">クリア</button>
+        </div>
+        <div id="adminLogContainer" style="max-height: 90px; overflow-y: auto; background: #f8fafc; border: 1px solid var(--border); border-radius: 4px; padding: 4px; font-size: 10px; font-family: monospace;">
+          <span style="color: var(--text-muted);">履歴はありません。</span>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- 1. 予約システム画面 -->
+  <div id="reservationView">
+    <div class="tab-admin-toolbar">
+      <div style="font-size: 10px; color: var(--danger); font-weight: 700; margin-bottom: 4px;">[管理者モード] 予約管理メニュー</div>
+      <div class="btn-group">
+        <button class="btn" style="background: var(--surface); color: var(--success);" onclick="openAddTimeSlotRowModal()">➕ コマ追加</button>
+        <button class="btn" style="background: var(--surface); color: var(--primary);" onclick="openCancelModal()">❌ 予約取消</button>
+        <button class="btn" style="background: var(--surface); color: #9333ea;" onclick="openPasswordChangeModal()">🔑 パスワード変更</button>
+        <button class="btn btn-admin" onclick="confirmResetCurrentWeek()">🗑️ 今週リセット</button>
+      </div>
+    </div>
+
+    <div class="rule-banner" id="ruleBannerBox">
+      <b>【予約制限ルール】</b><br>
+      • <b>月・火曜日</b>：1バンドにつき「1コマまで」<br>
+      • <b>水曜日以降</b>：3階部室に限り追加でもう1コマ（合計2コマまで）予約可能
+    </div>
+
+    <div class="control-panel">
+      <div class="section-title">部屋の選択</div>
+      <div class="btn-group">
+        <div style="display: flex; flex: 1; align-items: center;">
+          <button class="btn btn-room active" id="btnFloor4" onclick="switchRoom('floor4')" style="flex: 1;"><span id="roomNameFloor4">4階部室</span></button>
+          <button class="room-edit-btn" onclick="openRoomNameModal('floor4')">変更</button>
+        </div>
+        <div style="display: flex; flex: 1; align-items: center;">
+          <button class="btn btn-room" id="btnFloor3" onclick="switchRoom('floor3')" style="flex: 1;"><span id="roomNameFloor3">3階部室</span></button>
+          <button class="room-edit-btn" onclick="openRoomNameModal('floor3')">変更</button>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 8px;">週の選択 (日曜23:59自動繰り越し)</div>
+      <div class="btn-group">
+        <button class="btn btn-tab active" id="btnThisWeek" onclick="switchWeek('thisWeek')">今週</button>
+        <button class="btn btn-tab" id="btnNextWeek" onclick="switchWeek('nextWeek')">来週</button>
+      </div>
+    </div>
+
+    <h2 id="roomTitle" style="font-size: 12px; color: var(--text); margin: 0 0 6px 2px; font-weight: 700;">4階部室 予約状況</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 32%;">時間割</th>
+          <th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th><th>日</th>
+        </tr>
+      </thead>
+      <tbody id="timetableBody"></tbody>
+    </table>
+
+    <div id="chatSection">
+      <div id="chatNotificationBadge">新着</div>
+      <div class="flex-row" style="margin-bottom: 4px;">
+        <span class="section-title" id="chatTitleLabel" style="margin: 0;">管理者とのチャット</span>
+        <div id="adminChatSelectorWrapper" style="display: none;">
+          <select id="adminChatSelectTarget" class="modal-input" style="padding: 2px 4px; font-size: 11px; margin: 0;" onchange="changeAdminChatTarget()">
+          </select>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessagesContainer">
+        <span style="color: var(--text-muted); font-size: 10px;">メッセージはありません。</span>
+      </div>
+      <div style="display: flex; gap: 4px;">
+        <input type="text" id="chatInputMessage" class="modal-input" placeholder="メッセージを入力..." style="margin-top: 0; flex: 1;">
+        <button class="btn" style="background: var(--primary); color: white;" onclick="sendChatMessage()">送信</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 活動状況画面（日程・ライブも統合） -->
+  <div id="activityView">
+    <div class="tab-admin-toolbar">
+      <div style="font-size: 10px; color: var(--danger); font-weight: 700; margin-bottom: 4px;">[管理者モード] 活動実績・データメニュー</div>
+      <div class="btn-group">
+        <button class="btn" style="background: var(--surface); color: var(--primary);" onclick="openActivityManageModal()">✏️ 活動数管理</button>
+        <button class="btn" style="background: var(--surface); color: #c2410c;" onclick="openBandManageModal()">🎸 バンド管理</button>
+        <button class="btn" style="background: var(--surface); color: #0284c7;" onclick="openBandListModal()">🔑 PW一覧</button>
+        <button class="btn" style="background: var(--surface); color: #0d9488;" onclick="openExportDataModal()">💾 データ出力</button>
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <div class="flex-row">
+        <div>
+          <div class="section-title" style="margin-bottom: 2px;">バンド別 活動実績・学期集計</div>
+          <p style="font-size: 10px; color: var(--text-muted); margin: 0;">各バンドの活動コマ数を確認できます。</p>
+        </div>
+        <div>
+          <select id="selectActiveTerm" class="modal-input" style="padding: 2px; font-size: 11px; margin: 0;" onchange="currentActivityTerm=this.value; renderActivityView();">
+            <option value="all">全期間(累計)</option>
+            <option value="term1">1学期</option>
+            <option value="term2">2学期</option>
+            <option value="term3">3学期</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="term-date-banner">
+        <div>
+          <span style="font-size: 9px; color: var(--text-muted); font-weight: 700; display: block;">表示中の集計期間</span>
+          <span class="term-date-text" id="displayTermDateRange">全期間（通年）</span>
+        </div>
+        <button class="term-edit-btn" onclick="openTermDateEditModal()">期間変更</button>
+      </div>
+    </div>
+
+    <div class="activity-summary-grid">
+      <div class="stat-card">
+        <div class="stat-card-label">登録バンド</div>
+        <div class="stat-card-value" id="statTotalBands">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">今週の予約</div>
+        <div class="stat-card-value" id="statThisWeekTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">期間の活動</div>
+        <div class="stat-card-value" id="statAllTimeTotal">0</div>
+      </div>
+    </div>
+
+    <table class="activity-table">
+      <thead>
+        <tr>
+          <th style="width: 30%; text-align: left; padding-left: 6px;">バンド名</th>
+          <th style="width: 13%;">今週</th>
+          <th style="width: 13%;">来週</th>
+          <th style="width: 20%;">期間</th>
+          <th style="width: 24%;">評価</th>
+        </tr>
+      </thead>
+      <tbody id="activityTableBody"></tbody>
+    </table>
+
+    <!-- イベント・ライブ日程セクション（統合） -->
+    <div class="control-panel" style="margin-top: 16px;">
+      <div class="flex-row" style="align-items: center; margin-bottom: 6px;">
+        <div>
+          <div class="section-title" style="margin-bottom: 2px;">イベント・ライブ日程一覧</div>
+          <p style="font-size: 10px; color: var(--text-muted); margin: 0;">定期演奏会や全体ミーティング等の予定。</p>
+        </div>
+        <div>
+          <button class="btn admin-only-btn" style="background: var(--success); color: white; display: none; padding: 4px 8px; font-size: 10px;" id="btnOpenEventAdd" onclick="openEventAddModal()">➕ 日程追加</button>
+        </div>
+      </div>
+    </div>
+    <div id="eventsListContainer">
+      <p style="text-align: center; color: var(--text-muted); font-size: 11px; padding: 12px;">読み込み中...</p>
+    </div>
+  </div>
+
+  <!-- 3. 組織図画面 -->
+  <div id="orgView">
+    <div class="tab-admin-toolbar">
+      <div style="font-size: 10px; color: var(--danger); font-weight: 700; margin-bottom: 4px;">[管理者モード] 組織図管理メニュー</div>
+      <div class="btn-group">
+        <button class="btn" style="background: var(--surface); color: var(--success);" onclick="openAddOrgModal()">➕ 幹部項目追加</button>
+        <button class="btn" style="background: var(--surface); color: #0284c7;" onclick="openAddOrgSectionModal()">📂 新しい部門追加</button>
+        <button class="btn" style="background: var(--surface); color: #8b5cf6;" onclick="openOrgUnifiedColorModal()">🎨 枠色一括変更</button>
+        <button class="btn" style="background: var(--surface); color: var(--primary);" onclick="confirmResetOrgToDefault()">🔄 最新データ読込</button>
+      </div>
+    </div>
+
+    <div class="org-header-container">
+      <div class="org-sub-en">DAIDO MUSIC CLUB</div>
+      <div class="org-header-title" id="orgHeaderTitleText">2026年度後期 大同高校 軽音楽部 幹部組織図</div>
+      <button class="org-title-edit-btn" onclick="openOrgHeaderModal()">タイトル変更</button>
+    </div>
+
+    <div id="orgSectionsContainer"></div>
+
+    <div class="org-footer-note">
+      ※TEX所属生徒は学業専念のため役職免除。幹部部員は2年生が中心です。
+    </div>
+  </div>
+
+  <div id="contactBox" onclick="if(isAdmin || isMasterKeyLogin) openContactModal();" title="管理者モード時はタップして編集">
+    <b>お問い合わせ <span style="font-size: 8px; color: var(--primary);" id="contactEditHint"></span></b>
+    <span id="contactDisplay" style="white-space: pre-line;">読み込み中...</span>
+  </div>
+
+  <!-- ログインモーダル（画像デザイン再現） -->
+  <div id="startupLoginModal" class="custom-modal" style="display: flex;">
+    <div class="login-card">
+      <h3 class="login-card-title">軽音楽部ポータル ログイン</h3>
+      <p class="login-card-desc">バンド名とパスワードを入力してください。</p>
+      
+      <label class="login-field-label" for="inputLoginBandName">バンド名</label>
+      <input type="text" id="inputLoginBandName" class="login-field-input" placeholder="例: 軽音A">
+
+      <label class="login-field-label" for="inputLoginBandPass">パスワード</label>
+      <input type="password" id="inputLoginBandPass" class="login-field-input" placeholder="パスワードを入力">
+
+      <button class="btn-login-green" onclick="verifyManualBandLogin()">ログイン</button>
+
+      <div class="login-notice-box">
+        ※ パスワードを忘れた方は部長または副部長に連絡をよろしくお願いします。
+      </div>
+
+      <div class="login-admin-divider">
+        <div class="login-admin-caption">管理者の方はこちら</div>
+        <button class="btn-login-red" onclick="openStartupAdminModal()">管理者モードでログイン</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="startupAdminModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 280px;">
+      <h3>⚙️ 管理者 / マスターキー認証</h3>
+      <label class="modal-label">パスワード</label>
+      <input type="password" id="startupAdminPassInput" class="modal-input" placeholder="パスワードを入力">
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--primary); color: white; flex: 1;" onclick="verifyStartupAdminLogin()">ログイン</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeStartupAdminModal()">もどる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="passwordChangeModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3>🔑 パスワードの変更</h3>
+      <label class="modal-label">変更対象</label>
+      <select id="targetPasswordType" class="modal-input" style="margin-bottom: 6px;">
+        <option value="admin">管理者パスワード</option>
+        <option value="master">マスターキー</option>
+      </select>
+
+      <label class="modal-label">現在のパスワード</label>
+      <input type="password" id="currentPassInput" class="modal-input">
+
+      <label class="modal-label" style="margin-top: 6px;">新しいパスワード</label>
+      <input type="password" id="newPassInput" class="modal-input">
+
+      <label class="modal-label" style="margin-top: 6px;">新しいパスワード（確認）</label>
+      <input type="password" id="newPassConfirmInput" class="modal-input">
+
+      <div class="modal-btn-group" style="margin-top: 10px;">
+        <button class="btn" style="background: var(--primary); color: white; flex: 1;" onclick="executePasswordChange()">変更</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closePasswordChangeModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exportDataModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px; text-align: center;">
+      <h3>💾 データ出力 (CSV / JSON)</h3>
+      <p style="font-size: 11px; color: var(--text-muted); margin: 8px 0;">活動実績や予約データをダウンロードできます。</p>
+      
+      <button class="btn" style="background: var(--success); color: white; width: 100%; padding: 8px; margin-bottom: 6px;" onclick="exportActivityToCSV()">📄 活動実績CSV出力</button>
+      <button class="btn" style="background: var(--primary); color: white; width: 100%; padding: 8px; margin-bottom: 10px;" onclick="exportFullBackupJSON()">📦 全体バックアップJSON</button>
+      <button class="btn" style="background: #f8fafc; color: var(--text); width: 100%;" onclick="closeExportDataModal()">閉じる</button>
+    </div>
+  </div>
+
+  <div id="eventAddModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3>➕ イベント日程の追加</h3>
+      <label class="modal-label">日付</label>
+      <input type="date" id="inputEventDate" class="modal-input">
+      
+      <label class="modal-label">種別</label>
+      <select id="inputEventCategory" class="modal-input">
+        <option value="live">ライブ・演奏会</option>
+        <option value="meeting">ミーティング</option>
+        <option value="other">その他行事</option>
+      </select>
+
+      <label class="modal-label">イベント名</label>
+      <input type="text" id="inputEventTitle" class="modal-input" placeholder="例: 秋季校内ライブ">
+
+      <label class="modal-label">詳細・場所</label>
+      <textarea id="inputEventDesc" class="modal-textarea" placeholder="例: 視聴覚室にて"></textarea>
+
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveNewEvent()">追加</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeEventAddModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="termDateEditModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3>🗓️ 集計期間の編集</h3>
+      <label class="modal-label">全期間</label>
+      <input type="text" id="inputDateAll" class="modal-input">
+
+      <label class="modal-label">1学期</label>
+      <input type="text" id="inputDateTerm1" class="modal-input">
+
+      <label class="modal-label">2学期</label>
+      <input type="text" id="inputDateTerm2" class="modal-input">
+
+      <label class="modal-label">3学期</label>
+      <input type="text" id="inputDateTerm3" class="modal-input">
+
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveTermDateSettings()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeTermDateEditModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="roomNameModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 280px;">
+      <h3>🏷️ 部屋名の変更</h3>
+      <label class="modal-label">新しい部屋名</label>
+      <input type="text" id="inputNewRoomName" class="modal-input">
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveRoomNameModal()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeRoomNameModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="orgUnifiedColorModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 280px;">
+      <h3>🎨 枠色の一括変更</h3>
+      <label class="modal-label">色を選択</label>
+      <input type="color" id="inputUnifiedColor" value="#2563eb" style="width: 100%; height: 36px; margin-top: 4px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border);">
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="executeUnifiedOrgColor()">一括適用</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeOrgUnifiedColorModal()">キャンセル</button>
+      </div>
+      <div style="text-align: right; margin-top: 6px;">
+        <button class="btn" style="background: #f8fafc; color: var(--text); padding: 3px 6px; font-size: 9px;" onclick="executeResetInitialOrgColor()">初期色に戻す</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新しい部門（まとめ）追加用モーダル -->
+  <div id="orgSectionAddModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3>📂 新しい部門（まとめ）の追加</h3>
+      <label class="modal-label">部門名（ラベル）</label>
+      <input type="text" id="inputNewSectionLabel" class="modal-input" placeholder="例: 特別企画部門">
+      
+      <label class="modal-label" style="margin-top: 6px;">部門バッジの色</label>
+      <input type="color" id="inputNewSectionColor" value="#2563eb" style="width: 100%; height: 36px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border);">
+
+      <div class="modal-btn-group" style="margin-top: 10px;">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="executeAddOrgSection()">追加</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeAddOrgSectionModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bandListModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>🔑 登録バンド・PW一覧</h3>
+      <div id="adminAllBandsListContainer" style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 4px; background: #f8fafc;"></div>
+      <div class="modal-btn-group" style="margin-top: 10px;">
+        <button class="btn" style="background: #f8fafc; color: var(--text); width: 100%;" onclick="closeBandListModal()">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bandStyleEditModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3>✏️ バンド名・PW・表示色の編集</h3>
+      <input type="hidden" id="editBandOriginalName">
+      <label class="modal-label">バンド名</label>
+      <input type="text" id="editBandNameInput" class="modal-input">
+
+      <label class="modal-label" style="margin-top: 6px;">ログイン用パスワード</label>
+      <input type="text" id="editBandPassInput" class="modal-input" placeholder="パスワードを入力">
+
+      <label class="modal-label" style="margin-top: 6px;">文字色</label>
+      <input type="color" id="editBandTextColor" value="#0f172a" style="width: 100%; height: 36px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border);">
+
+      <label class="modal-label" style="margin-top: 6px;">背景色</label>
+      <input type="color" id="editBandBgColor" value="#ffffff" style="width: 100%; height: 36px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border);">
+
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveBandStyleEdit()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeBandStyleEditModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bookingModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px;">
+      <h3 id="bookingModalTitle">📅 予約の確認</h3>
+      <p style="font-size: 12px; margin: 8px 0 4px 0;" id="bookingConfirmText">この時間で予約しますか？</p>
+      
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin-bottom: 10px; font-size: 11px;" id="bookingDetailBox">
+        <b>選択日時：</b><span id="bookingDetailText">-</span>
+      </div>
+
+      <div id="adminBookingNameArea" style="display: none; background: var(--success-bg); padding: 8px; border-radius: 6px; border: 1px solid #bbf7d0; margin-bottom: 8px;">
+        <label class="modal-label" style="margin-top: 0; color: var(--success);">予約名 (管理者用)</label>
+        <input type="text" id="inputAdminBookingName" class="modal-input">
+      </div>
+
+      <div class="modal-btn-group" style="margin-top: 8px;">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="executeBooking()">予約</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeBookingModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bandManageModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>🎸 バンド追加・名前変更・PW変更</h3>
+      <div style="background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 8px;">
+        <label class="modal-label" style="margin-top: 0;">新規バンド名</label>
+        <input type="text" id="newBandNameInput" class="modal-input" style="margin-bottom: 4px;" placeholder="例: バンド名">
+        <label class="modal-label">専用パスワード</label>
+        <input type="text" id="newBandPassInput" class="modal-input" style="margin-bottom: 8px;" placeholder="例: 1234">
+        <button class="btn" style="background: var(--success); color: white; width: 100%;" onclick="addNewBandWithPass()">バンドを追加</button>
+      </div>
+      <div id="bandManageListContainer" style="max-height: 190px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 4px; background: #f8fafc;"></div>
+      <div class="modal-btn-group" style="margin-top: 10px;">
+        <button class="btn" style="background: #f8fafc; color: var(--text); width: 100%;" onclick="closeBandManageModal()">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customConfirmModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 300px; text-align: center;">
+      <h3 id="confirmModalTitle" style="color: var(--danger);">⚠️ 確認</h3>
+      <p style="font-size: 12px; margin: 12px 0;" id="confirmModalText">実行しますか？</p>
+      <div class="modal-btn-group">
+        <button class="btn" id="confirmModalYesBtn" style="background: var(--danger); color: white; flex: 1;" onclick="executeConfirmYes()">実行</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeCustomConfirmModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="orgAddModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>➕ 組織図項目の追加</h3>
+      <label class="modal-label">所属部門</label>
+      <select id="orgAddModalCategory" class="modal-input"></select>
+      
+      <label class="modal-label" style="margin-top: 6px;">タイトル</label>
+      <input type="text" id="orgAddModalTitle" class="modal-input">
+      
+      <label class="modal-label" style="margin-top: 6px;">メンバー名</label>
+      <textarea id="orgAddModalContent" class="modal-textarea"></textarea>
+      
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="executeAddOrgBox()">追加</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeAddOrgModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="orgModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>✏️ 組織図カードの編集</h3>
+      <label class="modal-label">所属部門</label>
+      <select id="orgModalCategory" class="modal-input"></select>
+      
+      <label class="modal-label" style="margin-top: 6px;">タイトル</label>
+      <input type="text" id="orgModalTitle" class="modal-input">
+      
+      <label class="modal-label" style="margin-top: 6px;">メンバー名</label>
+      <textarea id="orgModalContent" class="modal-textarea"></textarea>
+      
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveOrgModal()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeOrgModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="timeModal" class="custom-modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">⏰ 時間割の編集</h3>
+      <label class="modal-label">コマの名称</label>
+      <input type="text" id="inputSlotLabel" class="modal-input" style="font-weight: 600; margin-bottom: 4px;">
+
+      <label class="modal-label">A日課</label>
+      <input type="text" id="nameA" class="modal-input" style="margin-bottom: 2px;" placeholder="A日課">
+      <input type="text" id="inputA" class="modal-input">
+      <label class="modal-label" style="margin-top: 6px;">B日課</label>
+      <input type="text" id="nameB" class="modal-input" style="margin-bottom: 2px;" placeholder="B日課">
+      <input type="text" id="inputB" class="modal-input">
+      <label class="modal-label" style="margin-top: 6px;">AM授業</label>
+      <input type="text" id="nameAM" class="modal-input" style="margin-bottom: 2px;" placeholder="AM授業">
+      <input type="text" id="inputAM" class="modal-input">
+      <label class="modal-label" style="margin-top: 6px;">長期休業</label>
+      <input type="text" id="nameLong" class="modal-input" style="margin-bottom: 2px;" placeholder="長期休業">
+      <input type="text" id="inputLong" class="modal-input">
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveTimeModal()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeTimeModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="orgHeaderModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>🏷️ 組織図タイトルの変更</h3>
+      <label class="modal-label">全体タイトル</label>
+      <input type="text" id="orgHeaderInput" class="modal-input">
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveOrgHeaderModal()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeOrgHeaderModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cancelModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>❌ 個別予約の取消</h3>
+      <div id="cancelListContainer" style="max-height: 220px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 4px; background: #f8fafc;"></div>
+      <div class="modal-btn-group" style="margin-top: 10px;">
+        <button class="btn" style="background: #f8fafc; color: var(--text); width: 100%;" onclick="closeCancelModal()">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="contactModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>📞 お問い合わせ先の変更</h3>
+      <label class="modal-label">内容</label>
+      <textarea id="contactTextarea" class="modal-textarea"></textarea>
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--success); color: white; flex: 1;" onclick="saveContactModal()">保存</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeContactModal()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 280px; text-align: center;">
+      <h3 id="infoModalTitle" style="color: var(--success); border-bottom-color: var(--border);">通知</h3>
+      <p style="font-size: 12px; margin: 12px 0; white-space: pre-line;" id="infoModalText">完了しました</p>
+      <div class="modal-btn-group">
+        <button class="btn" style="background: var(--primary); color: white; width: 100%;" onclick="closeInfoModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="activityManageModal" class="custom-modal">
+    <div class="modal-content">
+      <h3>📊 活動数データの管理</h3>
+      <label class="modal-label">対象期間</label>
+      <select id="modalTermSelect" class="modal-input" style="margin-bottom: 8px;" onchange="changeActiveTermSetting(this.value)">
+        <option value="term1">1学期</option>
+        <option value="term2">2学期</option>
+        <option value="term3">3学期</option>
+        <option value="all">全期間(累計)</option>
+      </select>
+      <div id="activityManageListContainer" style="max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: 6px; padding: 4px; background: #f8fafc; margin-bottom: 8px;"></div>
+      <div class="modal-btn-group">
+        <button class="btn btn-admin" onclick="confirmResetCurrentTermActivityCounts()">期間内リセット</button>
+        <button class="btn" style="background: #f8fafc; color: var(--text); flex: 1;" onclick="closeActivityManageModal()">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJqBBI731DHs4LuL3R06PNaLWFNzOsmaU",
+      authDomain: "yoyaku-f89fb.firebaseapp.com",
+      databaseURL: "https://yoyaku-f89fb-default-rtdb.firebaseio.com",
+      projectId: "yoyaku-f89fb",
+      storageBucket: "yoyaku-f89fb.firebasestorage.app",
+      messagingSenderId: "881072855684",
+      appId: "1:881072855684:web:f457140b0db271208e80d1",
+      measurementId: "G-5Z3BF1H58H"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentRoom = 'floor4'; 
+    let currentWeek = 'thisWeek'; 
+    let allReservations = { floor4: { thisWeek: {}, nextWeek: {} }, floor3: { thisWeek: {}, nextWeek: {} } };
+    let registeredBands = [
+      { name: "軽音A", pass: "1111", textColor: "#0f172a", bgColor: "#ffffff" },
+      { name: "軽音B", pass: "2222", textColor: "#0f172a", bgColor: "#ffffff" },
+      { name: "Rockers", pass: "3333", textColor: "#0f172a", bgColor: "#ffffff" }
+    ]; 
+    let clubEvents = [];
+    let isAdmin = false;
+    let isMasterKeyLogin = false;
+    let adminPassword = "1234";
+    let masterKeyPassword = "123";
+    let currentLoginBand = null;
+    let selectedAdminChatBand = null;
+    let contactText = "担当: 顧問または幹部\nTEL: (未設定)";
+    let orgHeaderTitle = "2026年度後期 大同高校 軽音楽部 幹部組織図";
+    let roomNames = { floor4: "4階部室", floor3: "3階部室" };
+    let editingRoomKey = null;
+    let editingTimeIdx = null; 
+    let editingOrgIdx = null;
+    let targetBookingKey = null; 
+    
+    let bandActivityHistory = {};
+    let currentActivityTerm = 'all';
+    let currentConfirmCallback = null;
+
+    let termDateRanges = {
+      all: "2026年4月1日 〜 2027年3月31日（通年）",
+      term1: "2026年4月8日 〜 2026年7月20日（1学期）",
+      term2: "2026年9月1日 〜 2026年12月24日（2学期）",
+      term3: "2027年1月8日 〜 2027年3月19日（3学期）"
+    };
+
+    let isInitialChatLoad = true;
+
+    let defaultOrgSectionMeta = [
+      { key: 'top', label: '生徒会・相談役', badgeColor: '#2563eb', cols: '' },
+      { key: 'advisor', label: '顧問・作詞作曲部門', badgeColor: '#475569', cols: '' },
+      { key: 'exec', label: '主務（部長・副部長・学年主任）', badgeColor: '#0f172a', cols: '' },
+      { key: 'pa', label: 'PA機材部門', badgeColor: '#d97706', cols: '' },
+      { key: 'media', label: 'メディア戦略部門', badgeColor: '#e11d48', cols: '' },
+      { key: 'equip', label: '備品管理部門', badgeColor: '#0284c7', cols: '' },
+      { key: 'leader', label: 'バンドリーダー (P.L)', badgeColor: '#475569', cols: 'cols-3' }
+    ];
+    let orgSectionMeta = JSON.parse(JSON.stringify(defaultOrgSectionMeta));
+
+    db.ref('settings/passwords').on('value', snapshot => {
+      const val = snapshot.val();
+      if (val) {
+        if (val.admin) adminPassword = val.admin;
+        if (val.master) masterKeyPassword = val.master;
+      }
+    });
+
+    function showCustomConfirm(title, message, callback, btnText = "実行", btnColor = "var(--danger)") {
+      document.getElementById('confirmModalTitle').innerText = title;
+      document.getElementById('confirmModalTitle').style.color = btnColor;
+      document.getElementById('confirmModalText').innerText = message;
+      const yesBtn = document.getElementById('confirmModalYesBtn');
+      yesBtn.innerText = btnText;
+      yesBtn.style.backgroundColor = btnColor;
+      currentConfirmCallback = callback;
+      document.getElementById('customConfirmModal').style.display = 'flex';
+    }
+    function closeCustomConfirmModal() {
+      document.getElementById('customConfirmModal').style.display = 'none';
+      currentConfirmCallback = null;
+    }
+    function executeConfirmYes() {
+      if (currentConfirmCallback) currentConfirmCallback();
+      closeCustomConfirmModal();
+    }
+
+    const defaultFloorTimesStruct = {
+      floor4: [
+        { slotLabel: 'コマ1', nameA: 'A日課', a: '15:30-16:15', nameB: 'B日課', b: '15:00-15:50', nameAM: 'AM授業', am: '12:00-13:00', nameLong: '長期休業', long: '10:00-11:00' },
+        { slotLabel: 'コマ2', nameA: 'A日課', a: '16:15-17:00', nameB: 'B日課', b: '15:50-16:40', nameAM: 'AM授業', am: '13:00-14:00', nameLong: '長期休業', long: '11:00-12:00' },
+        { slotLabel: 'コマ3', nameA: 'A日課', a: '17:00-17:45', nameB: 'B日課', b: '16:40-17:30', nameAM: 'AM授業', am: '14:00-15:00', nameLong: '長期休業', long: '12:00-13:00' },
+        { slotLabel: 'コマ4', nameA: 'A日課', a: '17:45-18:30', nameB: 'B日課', b: '17:30-18:20', nameAM: 'AM授業', am: '15:00-16:00', nameLong: '長期休業', long: '13:00-14:00' },
+        { slotLabel: 'コマ5', nameA: 'A日課', a: '18:30-19:15', nameB: 'B日課', b: '18:20-19:10', nameAM: 'AM授業', am: '16:00-17:00', nameLong: '長期休業', long: '14:00-15:00' }
+      ],
+      floor3: [
+        { slotLabel: 'コマ1', nameA: 'A日課', a: '終礼後-16:30', nameB: 'B日課', b: '終礼後-16:10', nameAM: 'AM授業', am: '13:00-14:30', nameLong: '長期休業', long: '10:00-12:00' },
+        { slotLabel: 'コマ2', nameA: 'A日課', a: '16:30-17:30', nameB: 'B日課', b: '16:10-17:20', nameAM: 'AM授業', am: '14:30-16:00', nameLong: '長期休業', long: '12:00-14:00' },
+        { slotLabel: 'コマ3', nameA: 'A日課', a: '17:30-18:30', nameB: 'B日課', b: '17:20-18:30', nameAM: 'AM授業', am: '16:00-17:30', nameLong: '長期休業', long: '14:00-16:00' }
+      ]
+    };
+
+    let floorTimes = JSON.parse(JSON.stringify(defaultFloorTimesStruct));
+
+    const defaultOrgBoxes = [
+      { id: 'box_top1', category: 'top', title: '大同高校生徒会', content: '主任 村上 淳', headerBg: '#f8fafc', borderColor: '#2563eb', textColor: '#0f172a' },
+      { id: 'box_top2', category: 'top', title: '相談役', content: '上月 健生\n木下 銀', headerBg: '#f8fafc', borderColor: '#2563eb', textColor: '#0f172a' },
+      { id: 'box_adv1', category: 'advisor', title: '全体統括（顧問）', content: '八木 友太', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_adv2', category: 'advisor', title: '技術部門担当（顧問）', content: '長谷 学', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_adv3', category: 'advisor', title: '総務部門担当（顧問）', content: '田村 尚平', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_adv4', category: 'advisor', title: '経理部門担当（顧問）', content: '宮脇 悠希', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_adv5', category: 'advisor', title: '作詞作曲部門', content: '有志部員たち', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_ex1', category: 'exec', title: '部長 / 補佐 / 副部長', content: '部長・補佐・副部長・補佐\n（2年生中心）', headerBg: '#f8fafc', borderColor: '#0f172a', textColor: '#0f172a' },
+      { id: 'box_ex2', category: 'exec', title: '2年主任 / 1年主任', content: '2年主任・補佐\n1年主任・補佐', headerBg: '#f8fafc', borderColor: '#0f172a', textColor: '#0f172a' },
+      { id: 'box_ex3', category: 'exec', title: '担当業務内容（部長・副部長系）', content: '・LIVE統括・機材管理：全員\n・OB・OG提携：部長\n・他校連絡窓口：副部長', isSmall: true, headerBg: '#f8fafc', borderColor: '#0f172a', textColor: '#64748b' },
+      { id: 'box_ex4', category: 'exec', title: '担当業務内容（学年主任系）', content: '・生徒情報共有：全員\n・練習進捗管理：各主長', isSmall: true, headerBg: '#f8fafc', borderColor: '#0f172a', textColor: '#64748b' },
+      { id: 'box_pa1', category: 'pa', title: 'PA機材部門', content: '部門長 岡島 寛人\n副部門長 溝口 颯人', headerBg: '#f8fafc', borderColor: '#d97706', textColor: '#0f172a' },
+      { id: 'box_pa2', category: 'pa', title: '音響放送係', content: '左高 琢雅・長谷川 輝\n落合 那優・亀井 凛生', headerBg: '#f8fafc', borderColor: '#d97706', textColor: '#0f172a' },
+      { id: 'box_pa3', category: 'pa', title: '放送庶務係', content: '立橘 虎太郎・山下 暖人 他', headerBg: '#f8fafc', borderColor: '#d97706', textColor: '#0f172a' },
+      { id: 'box_pa4', category: 'pa', title: '担当業務内容（PA機材）', content: '・放課放送管理：部門長\n・PAエンジニア：副部門長', isSmall: true, headerBg: '#f8fafc', borderColor: '#d97706', textColor: '#64748b' },
+      { id: 'box_med1', category: 'media', title: 'メディア戦略部門', content: '部門長 田中 沙樹\n副部門長 箕浦 佑奈', headerBg: '#f8fafc', borderColor: '#e11d48', textColor: '#0f172a' },
+      { id: 'box_med2', category: 'media', title: '動画編集係', content: '松井 日南汰・溝口 颯人 他', headerBg: '#f8fafc', borderColor: '#e11d48', textColor: '#0f172a' },
+      { id: 'box_med3', category: 'media', title: '撮影記録係', content: '磯部 亜実・森川 小春 他', headerBg: '#f8fafc', borderColor: '#e11d48', textColor: '#0f172a' },
+      { id: 'box_med4', category: 'media', title: '担当業務内容（メディア戦略）', content: '・イベント統括：全員\n・インスタ管理：田中', isSmall: true, headerBg: '#f8fafc', borderColor: '#e11d48', textColor: '#64748b' },
+      { id: 'box_eq1', category: 'equip', title: '備品管理部門', content: '部門長 芦澤 諒悟\n副部門長 浦田 隼人', headerBg: '#f8fafc', borderColor: '#0284c7', textColor: '#0f172a' },
+      { id: 'box_eq2', category: 'equip', title: 'メンテナンス係', content: '安澤 宙・小成 蓮音 他', headerBg: '#f8fafc', borderColor: '#0284c7', textColor: '#0f172a' },
+      { id: 'box_eq3', category: 'equip', title: 'マネジメント係', content: '山本 てつや・横山 蕾音 他', headerBg: '#f8fafc', borderColor: '#0284c7', textColor: '#0f172a' },
+      { id: 'box_eq4', category: 'equip', title: '担当業務内容（備品管理）', content: '・機材メンテ：全員\n・環境整備：全員', isSmall: true, headerBg: '#f8fafc', borderColor: '#0284c7', textColor: '#64748b' },
+      { id: 'box_pl1', category: 'leader', title: 'ボーカル P.L', content: '躑手 佑斗', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_pl2', category: 'leader', title: 'ギター P.L', content: '稲葉 樹', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_pl3', category: 'leader', title: 'ベース P.L', content: '高井 恵空', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_pl4', category: 'leader', title: 'ドラム P.L', content: '久野 逞斗', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' },
+      { id: 'box_pl5', category: 'leader', title: 'キーボード P.L', content: '小塚 直也', headerBg: '#f8fafc', borderColor: '#475569', textColor: '#0f172a' }
+    ];
+
+    let currentOrgBoxes = [];
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const dayNames = { mon: '月', tue: '火', wed: '水', thu: '木', fri: '金', sat: '土', sun: '日' };
+    const dayNamesJp = ['日', '月', '火', '水', '木', '金', '土'];
+
+    function verifyManualBandLogin() {
+      const nameVal = document.getElementById('inputLoginBandName').value.trim();
+      const passVal = document.getElementById('inputLoginBandPass').value.trim();
+
+      if (!nameVal || !passVal) {
+        showInfoModal('入力エラー', 'バンド名とパスワードを入力してください。', true);
+        return;
+      }
+
+      const found = registeredBands.find(b => b.name === nameVal);
+      const isMasterKey = (passVal === masterKeyPassword);
+
+      if (!isMasterKey && (!found || found.pass !== passVal)) {
+        showInfoModal('認証エラー', 'バンド名またはパスワードが間違っています。', true);
+        return;
+      }
+
+      if (isMasterKey && !found) {
+        registeredBands.push({ name: nameVal, pass: "0000", textColor: "#0f172a", bgColor: "#ffffff" });
+        db.ref('registeredBands').set(registeredBands);
+      }
+
+      currentLoginBand = nameVal;
+      isAdmin = false;
+      isMasterKeyLogin = isMasterKey;
+      document.getElementById('bodyRoot').classList.remove('admin-mode', 'master-mode');
+      if (isMasterKey) {
+        document.getElementById('bodyRoot').classList.add('master-mode');
+        document.getElementById('loginStatusSubtitle').innerText = `ログイン中: ${currentLoginBand} [システム総管理者 / Master]`;
+      } else {
+        document.getElementById('loginStatusSubtitle').innerText = `ログイン中: ${currentLoginBand} バンド`;
+      }
+      document.getElementById('startupLoginModal').style.display = 'none';
+
+      document.getElementById('chatTitleLabel').innerText = `管理者とのチャット (${currentLoginBand})`;
+      document.getElementById('adminChatSelectorWrapper').style.display = 'none';
+      
+      setupChatListener();
+      showInfoModal('ログイン成功', `${currentLoginBand}としてログインしました。`);
+    }
+
+    function openStartupAdminModal() {
+      document.getElementById('startupAdminPassInput').value = '';
+      document.getElementById('startupAdminModal').style.display = 'flex';
+    }
+
+    function closeStartupAdminModal() {
+      document.getElementById('startupAdminModal').style.display = 'none';
+    }
+
+    function verifyStartupAdminLogin() {
+      const pass = document.getElementById('startupAdminPassInput').value;
+      if (pass !== adminPassword && pass !== masterKeyPassword) {
+        showInfoModal('認証エラー', 'パスワードが違います。', true);
+        return;
+      }
+      
+      const isMaster = (pass === masterKeyPassword);
+      isAdmin = true;
+      isMasterKeyLogin = isMaster;
+      currentLoginBand = isMaster ? "システム総管理者" : "管理者";
+      
+      const rootBody = document.getElementById('bodyRoot');
+      rootBody.classList.remove('admin-mode', 'master-mode');
+      
+      if (isMaster) {
+        rootBody.classList.add('master-mode');
+        document.getElementById('loginStatusSubtitle').innerText = `ログイン中: システム総管理者 (Master)`;
+      } else {
+        rootBody.classList.add('admin-mode');
+        document.getElementById('loginStatusSubtitle').innerText = `ログイン中: 管理者`;
+      }
+
+      document.getElementById('startupAdminModal').style.display = 'none';
+      document.getElementById('startupLoginModal').style.display = 'none';
+      
+      const btnAddEvent = document.getElementById('btnOpenEventAdd');
+      if (btnAddEvent) btnAddEvent.style.display = 'inline-block';
+
+      renderOrgBoxes();
+      renderTable();
+      renderEventsView();
+      setupAdminChatSelector();
+      logAction(`${currentLoginBand}としてログインしました`);
+      showInfoModal('管理者モード', `${currentLoginBand}モードでログインしました。`);
+    }
+
+    function logoutSession() {
+      isAdmin = false;
+      isMasterKeyLogin = false;
+      currentLoginBand = null;
+      selectedAdminChatBand = null;
+      document.getElementById('bodyRoot').classList.remove('admin-mode', 'master-mode');
+      document.getElementById('loginStatusSubtitle').innerText = `ログイン状態: 未ログイン`;
+      document.getElementById('inputLoginBandName').value = '';
+      document.getElementById('inputLoginBandPass').value = '';
+      
+      const btnAddEvent = document.getElementById('btnOpenEventAdd');
+      if (btnAddEvent) btnAddEvent.style.display = 'none';
+
+      document.getElementById('startupLoginModal').style.display = 'flex';
+    }
+
+    function openPasswordChangeModal() {
+      document.getElementById('currentPassInput').value = '';
+      document.getElementById('newPassInput').value = '';
+      document.getElementById('newPassConfirmInput').value = '';
+      document.getElementById('passwordChangeModal').style.display = 'flex';
+    }
+    function closePasswordChangeModal() {
+      document.getElementById('passwordChangeModal').style.display = 'none';
+    }
+    function executePasswordChange() {
+      const type = document.getElementById('targetPasswordType').value;
+      const currentVal = document.getElementById('currentPassInput').value;
+      const newVal = document.getElementById('newPassInput').value.trim();
+      const newConfirm = document.getElementById('newPassConfirmInput').value.trim();
+
+      const expectedCurrent = (type === 'admin') ? adminPassword : masterKeyPassword;
+
+      if (currentVal !== expectedCurrent) {
+        showInfoModal('エラー', '現在のパスワードが正しくありません。', true);
+        return;
+      }
+      if (!newVal || newVal.length < 3) {
+        showInfoModal('エラー', '新しいパスワードは3文字以上で入力してください。', true);
+        return;
+      }
+      if (newVal !== newConfirm) {
+        showInfoModal('エラー', '新しいパスワード（確認）が一致しません。', true);
+        return;
+      }
+
+      if (type === 'admin') {
+        adminPassword = newVal;
+      } else {
+        masterKeyPassword = newVal;
+      }
+
+      db.ref('settings/passwords').set({
+        admin: adminPassword,
+        master: masterKeyPassword
+      });
+
+      closePasswordChangeModal();
+      logAction(`${type === 'admin' ? '管理者パスワード' : 'マスターキー'}を変更しました`);
+      showInfoModal('変更完了', 'パスワードを正常に変更しました。');
+    }
+
+    function openExportDataModal() { document.getElementById('exportDataModal').style.display = 'flex'; }
+    function closeExportDataModal() { document.getElementById('exportDataModal').style.display = 'none'; }
+
+    function exportActivityToCSV() {
+      const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+      let csv = "バンド名,今週予約数,来週予約数,1学期活動数,2学期活動数,3学期活動数,累計活動数\n";
+      registeredBands.forEach(bandObj => {
+        const name = bandObj.name;
+        let twCount = 0;
+        let nwCount = 0;
+        ['floor4', 'floor3'].forEach(r => {
+          Object.values((allReservations[r] || {}).thisWeek || {}).forEach(v => { if (v === name) twCount++; });
+          Object.values((allReservations[r] || {}).nextWeek || {}).forEach(v => { if (v === name) nwCount++; });
+        });
+        const hist = bandActivityHistory[name] || { term1: 0, term2: 0, term3: 0, total: 0 };
+        csv += `"${name}",${twCount},${nwCount},${hist.term1 || 0},${hist.term2 || 0},${hist.term3 || 0},${hist.total || 0}\n`;
+      });
+
+      const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const d = new Date();
+      a.download = `keion_activity_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      closeExportDataModal();
+      logAction('活動実績CSVデータを出力しました');
+      showInfoModal('出力完了', 'CSVファイルをダウンロードしました。');
+    }
+
+    function exportFullBackupJSON() {
+      const backupObj = {
+        exportedAt: new Date().toISOString(),
+        reservations: allReservations,
+        registeredBands: registeredBands,
+        bandActivityHistory: bandActivityHistory,
+        clubEvents: clubEvents,
+        floorTimes: floorTimes,
+        orgBoxes: currentOrgBoxes,
+        orgSectionMeta: orgSectionMeta
+      };
+      const blob = new Blob([JSON.stringify(backupObj, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const d = new Date();
+      a.download = `keion_portal_backup_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      closeExportDataModal();
+      logAction('システム全体のJSONバックアップを出力しました');
+      showInfoModal('出力完了', 'JSONバックアップファイルをダウンロードしました。');
+    }
+
+    db.ref('clubEvents').on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val) {
+        clubEvents = Object.entries(val).map(([id, item]) => ({ id, ...item }));
+        clubEvents.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      } else {
+        clubEvents = [];
+      }
+      renderEventsView();
+    });
+
+    function openEventAddModal() {
+      document.getElementById('inputEventDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('inputEventCategory').value = 'live';
+      document.getElementById('inputEventTitle').value = '';
+      document.getElementById('inputEventDesc').value = '';
+      document.getElementById('eventAddModal').style.display = 'flex';
+    }
+    function closeEventAddModal() { document.getElementById('eventAddModal').style.display = 'none'; }
+
+    function saveNewEvent() {
+      const dateVal = document.getElementById('inputEventDate').value;
+      const catVal = document.getElementById('inputEventCategory').value;
+      const titleVal = document.getElementById('inputEventTitle').value.trim();
+      const descVal = document.getElementById('inputEventDesc').value.trim();
+
+      if (!dateVal || !titleVal) {
+        showInfoModal('入力エラー', '日付とイベント名を入力してください。', true);
+        return;
+      }
+      db.ref('clubEvents').push({
+        date: dateVal,
+        category: catVal,
+        title: titleVal,
+        desc: descVal
+      });
+      closeEventAddModal();
+      logAction(`イベント「${titleVal}」を追加しました`);
+      showInfoModal('追加完了', '新しい日程を追加しました。');
+    }
+
+    function deleteClubEvent(eventId) {
+      showCustomConfirm('イベント日程の削除', 'この日程を本当に削除しますか？', () => {
+        db.ref(`clubEvents/${eventId}`).remove();
+        logAction('イベント日程を削除しました');
+        showInfoModal('削除完了', '日程を削除しました。');
+      }, '削除', 'var(--danger)');
+    }
+
+    function renderEventsView() {
+      const container = document.getElementById('eventsListContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (clubEvents.length === 0) {
+        container.innerHTML = '<div style="background:var(--surface); padding:16px; border-radius:8px; text-align:center; color:var(--text-muted); font-size:11px; border: 1px solid var(--border); margin-top: 6px;">登録されている予定はありません。</div>';
+        return;
+      }
+
+      const catLabels = { live: 'ライブ・演奏会', meeting: 'ミーティング', other: '行事・連絡' };
+      clubEvents.forEach(ev => {
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.innerHTML = `
+          <span class="event-date-badge">${ev.date}</span>
+          <span class="event-cat-tag">${catLabels[ev.category] || '予定'}</span>
+          <button class="event-del-btn" onclick="deleteClubEvent('${ev.id}')">削除</button>
+          <div class="event-title">${ev.title}</div>
+          <div class="event-desc">${ev.desc || ''}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openTermDateEditModal() {
+      document.getElementById('inputDateAll').value = termDateRanges.all || '';
+      document.getElementById('inputDateTerm1').value = termDateRanges.term1 || '';
+      document.getElementById('inputDateTerm2').value = termDateRanges.term2 || '';
+      document.getElementById('inputDateTerm3').value = termDateRanges.term3 || '';
+      document.getElementById('termDateEditModal').style.display = 'flex';
+    }
+    function closeTermDateEditModal() { document.getElementById('termDateEditModal').style.display = 'none'; }
+    function saveTermDateSettings() {
+      termDateRanges = {
+        all: document.getElementById('inputDateAll').value.trim() || '全期間',
+        term1: document.getElementById('inputDateTerm1').value.trim() || '1学期',
+        term2: document.getElementById('inputDateTerm2').value.trim() || '2学期',
+        term3: document.getElementById('inputDateTerm3').value.trim() || '3学期'
+      };
+      db.ref('termDateRanges').set(termDateRanges);
+      closeTermDateEditModal();
+      renderActivityView();
+      logAction('集計期間を変更しました');
+      showInfoModal('保存完了', '集計期間を保存しました。');
+    }
+
+    function openRoomNameModal(roomKey) {
+      editingRoomKey = roomKey;
+      document.getElementById('inputNewRoomName').value = roomNames[roomKey] || (roomKey === 'floor4' ? '4階部室' : '3階部室');
+      document.getElementById('roomNameModal').style.display = 'flex';
+    }
+    function closeRoomNameModal() { document.getElementById('roomNameModal').style.display = 'none'; editingRoomKey = null; }
+    function saveRoomNameModal() {
+      if (!editingRoomKey) return;
+      const val = document.getElementById('inputNewRoomName').value.trim();
+      if (!val) { showInfoModal('エラー', '部屋名を入力してください。', true); return; }
+      roomNames[editingRoomKey] = val;
+      db.ref('roomNames').set(roomNames);
+      closeRoomNameModal();
+      logAction(`部屋名を「${val}」に変更しました`);
+      showInfoModal('保存完了', '部屋名を変更しました。');
+    }
+
+    function openBandListModal() {
+      const container = document.getElementById('adminAllBandsListContainer');
+      container.innerHTML = '';
+      if (registeredBands.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 11px; padding: 6px;">登録バンドはありません。</p>';
+      } else {
+        registeredBands.forEach(band => {
+          const div = document.createElement('div');
+          div.className = 'list-item';
+          div.innerHTML = `<span><b>${band.name}</b> (PW: ${band.pass})</span>`;
+          container.appendChild(div);
+        });
+      }
+      document.getElementById('bandListModal').style.display = 'flex';
+    }
+    function closeBandListModal() { document.getElementById('bandListModal').style.display = 'none'; }
+
+    function openBandStyleEditModal(bandName) {
+      const band = registeredBands.find(b => b.name === bandName);
+      if (!band) return;
+      document.getElementById('editBandOriginalName').value = band.name;
+      document.getElementById('editBandNameInput').value = band.name;
+      document.getElementById('editBandPassInput').value = band.pass || '';
+      document.getElementById('editBandTextColor').value = band.textColor || '#0f172a';
+      document.getElementById('editBandBgColor').value = band.bgColor || '#ffffff';
+      document.getElementById('bandStyleEditModal').style.display = 'flex';
+    }
+    function closeBandStyleEditModal() { document.getElementById('bandStyleEditModal').style.display = 'none'; }
+
+    function saveBandStyleEdit() {
+      const origName = document.getElementById('editBandOriginalName').value;
+      const newName = document.getElementById('editBandNameInput').value.trim();
+      const newPass = document.getElementById('editBandPassInput').value.trim();
+      const textColor = document.getElementById('editBandTextColor').value;
+      const bgColor = document.getElementById('editBandBgColor').value;
+
+      if (!newName) { showInfoModal('エラー', 'バンド名を入力してください。', true); return; }
+      if (!newPass) { showInfoModal('エラー', 'パスワードを入力してください。', true); return; }
+
+      const duplicate = registeredBands.some(b => b.name === newName && b.name !== origName);
+      if (duplicate) {
+        showInfoModal('エラー', '同じ名前のバンドがすでに存在します。', true);
+        return;
+      }
+
+      const target = registeredBands.find(b => b.name === origName);
+      if (target) {
+        target.name = newName;
+        target.pass = newPass;
+        target.textColor = textColor;
+        target.bgColor = bgColor;
+        db.ref('registeredBands').set(registeredBands);
+
+        if (origName !== newName) {
+          db.ref(`bandActivityHistory/${origName}`).once('value', snapshot => {
+            if (snapshot.exists()) {
+              db.ref(`bandActivityHistory/${newName}`).set(snapshot.val());
+              db.ref(`bandActivityHistory/${origName}`).remove();
+            }
+          });
+
+          db.ref(`chats/${origName}`).once('value', snapshot => {
+            if (snapshot.exists()) {
+              db.ref(`chats/${newName}`).set(snapshot.val());
+              db.ref(`chats/${origName}`).remove();
+            }
+          });
+
+          ['floor4', 'floor3'].forEach(roomKey => {
+            ['thisWeek', 'nextWeek'].forEach(weekKey => {
+              const weekObj = (allReservations[roomKey] && allReservations[roomKey][weekKey]) || {};
+              Object.entries(weekObj).forEach(([slotKey, bookedBand]) => {
+                if (bookedBand === origName) {
+                  db.ref(`reservations/${roomKey}/${weekKey}/${slotKey}`).set(newName);
+                }
+              });
+            });
+          });
+        }
+      }
+
+      closeBandStyleEditModal();
+      renderBandManageList();
+      logAction(`バンド「${origName}」→「${newName}」（PW更新）を変更しました`);
+      showInfoModal('保存完了', 'バンド名・パスワードを更新しました。');
+    }
+
+    let chatDbRef = null;
+    function setupChatListener() {
+      if (chatDbRef) chatDbRef.off();
+      const targetBand = (isAdmin || isMasterKeyLogin) ? selectedAdminChatBand : currentLoginBand;
+      if (!targetBand) {
+        document.getElementById('chatMessagesContainer').innerHTML = '<span style="color: var(--text-muted); font-size: 10px;">チャットする相手を選択してください。</span>';
+        return;
+      }
+      isInitialChatLoad = true;
+      chatDbRef = db.ref(`chats/${targetBand}`);
+      chatDbRef.limitToLast(50).on('value', (snapshot) => {
+        const data = snapshot.val();
+        const container = document.getElementById('chatMessagesContainer');
+        container.innerHTML = '';
+        if (!data) {
+          container.innerHTML = '<span style="color: var(--text-muted); font-size: 10px;">メッセージはありません。</span>';
+          return;
+        }
+        const msgList = Object.values(data);
+        msgList.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = 'chat-msg';
+          div.innerHTML = `<b>${msg.sender}</b>: ${msg.text} <span style="font-size: 9px; color: var(--text-muted); float: right;">${msg.time}</span>`;
+          container.appendChild(div);
+        });
+        container.scrollTop = container.scrollHeight;
+
+        if (!isInitialChatLoad && msgList.length > 0) {
+          const lastMsg = msgList[msgList.length - 1];
+          if (lastMsg.sender !== currentLoginBand) {
+            const badge = document.getElementById('chatNotificationBadge');
+            badge.style.display = 'block';
+            setTimeout(() => { badge.style.display = 'none'; }, 4000);
+          }
+        }
+        isInitialChatLoad = false;
+      });
+    }
+
+    function setupAdminChatSelector() {
+      const select = document.getElementById('adminChatSelectTarget');
+      select.innerHTML = '<option value="">-- バンドを選択 --</option>';
+      registeredBands.forEach(band => {
+        const opt = document.createElement('option');
+        opt.value = band.name;
+        opt.innerText = band.name;
+        select.appendChild(opt);
+      });
+      document.getElementById('adminChatSelectorWrapper').style.display = 'inline-block';
+      document.getElementById('chatTitleLabel').innerText = `バンド別チャット`;
+    }
+
+    function changeAdminChatTarget() {
+      selectedAdminChatBand = document.getElementById('adminChatSelectTarget').value;
+      setupChatListener();
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInputMessage');
+      const text = input.value.trim();
+      const targetBand = (isAdmin || isMasterKeyLogin) ? selectedAdminChatBand : currentLoginBand;
+      if (!targetBand || !text) return;
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      db.ref(`chats/${targetBand}`).push({ sender: currentLoginBand, text, time: timeStr });
+      input.value = '';
+    }
+
+    function logAction(actionDescription) {
+      const now = new Date();
+      const timeStr = `${now.getMonth() + 1}/${now.getDate()}(${dayNamesJp[now.getDay()]}) ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      db.ref('adminLogs').push({ time: timeStr, actor: currentLoginBand || "ゲスト", action: actionDescription });
+    }
+
+    db.ref('adminLogs').limitToLast(30).on('value', (snapshot) => {
+      const data = snapshot.val();
+      const container = document.getElementById('adminLogContainer');
+      container.innerHTML = '';
+      if (!data) { container.innerHTML = '<span style="color: var(--text-muted);">履歴はありません。</span>'; return; }
+      Object.values(data).reverse().forEach(log => {
+        const div = document.createElement('div');
+        div.style.marginBottom = '2px';
+        div.innerHTML = `<span style="color: var(--primary);">[${log.time}]</span> <b style="color: var(--danger);">${log.actor}</b>: ${log.action}`;
+        container.appendChild(div);
+      });
+    });
+
+    function clearAdminLogs() {
+      showCustomConfirm('履歴のクリア', '操作履歴をすべてクリアしますか？', () => {
+        db.ref('adminLogs').remove();
+        showInfoModal('クリア完了', '履歴をクリアしました。');
+      }, 'クリア', 'var(--danger)');
+    }
+
+    function showInfoModal(title, message, isError = false) {
+      const titleEl = document.getElementById('infoModalTitle');
+      titleEl.innerText = title;
+      titleEl.style.color = isError ? 'var(--danger)' : 'var(--success)';
+      document.getElementById('infoModalText').innerText = message;
+      document.getElementById('infoModal').style.display = 'flex';
+    }
+    function closeInfoModal() { document.getElementById('infoModal').style.display = 'none'; }
+
+    function switchMainTab(tabName) {
+      document.getElementById('navReservation').classList.toggle('active', tabName === 'reservation');
+      document.getElementById('navActivity').classList.toggle('active', tabName === 'activity');
+      document.getElementById('navOrg').classList.toggle('active', tabName === 'org');
+      
+      document.getElementById('reservationView').style.display = (tabName === 'reservation') ? 'block' : 'none';
+      document.getElementById('activityView').style.display = (tabName === 'activity') ? 'block' : 'none';
+      document.getElementById('orgView').style.display = (tabName === 'org') ? 'block' : 'none';
+      
+      if (tabName === 'activity') {
+        renderActivityView();
+        renderEventsView();
+      }
+    }
+
+    db.ref('reservations').on('value', (snapshot) => {
+      allReservations = snapshot.val() || { floor4: { thisWeek: {}, nextWeek: {} }, floor3: { thisWeek: {}, nextWeek: {} } };
+      renderTable();
+      renderActivityView();
+    });
+
+    db.ref('bandActivityHistory').on('value', (snapshot) => {
+      bandActivityHistory = snapshot.val() || {};
+      renderActivityView();
+    });
+
+    db.ref('termDateRanges').on('value', (snapshot) => {
+      if (snapshot.val() !== null) {
+        termDateRanges = { ...termDateRanges, ...snapshot.val() };
+      }
+      renderActivityView();
+    });
+
+    db.ref('registeredBands').on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data !== null) {
+        registeredBands = data.map(item => {
+          if (typeof item === 'string') return { name: item, pass: "0000", textColor: "#0f172a", bgColor: "#ffffff" };
+          return { textColor: "#0f172a", bgColor: "#ffffff", ...item };
+        });
+      }
+      if (isAdmin || isMasterKeyLogin) setupAdminChatSelector();
+      renderActivityView();
+    });
+
+    db.ref('orgSectionMeta').on('value', (snapshot) => {
+      const val = snapshot.val();
+      if (val !== null && Array.isArray(val) && val.length > 0) {
+        orgSectionMeta = val;
+      } else {
+        orgSectionMeta = JSON.parse(JSON.stringify(defaultOrgSectionMeta));
+      }
+      renderOrgBoxes();
+      populateOrgCategorySelects();
+    });
+
+    db.ref('orgBoxes').on('value', (snapshot) => {
+      const val = snapshot.val();
+      currentOrgBoxes = (val !== null && val.length > 0) ? val : defaultOrgBoxes;
+      renderOrgBoxes();
+    });
+
+    db.ref('floorTimes').on('value', (snapshot) => {
+      floorTimes = snapshot.val() !== null ? snapshot.val() : JSON.parse(JSON.stringify(defaultFloorTimesStruct));
+      renderTable();
+    });
+
+    db.ref('roomNames').on('value', (snapshot) => {
+      if (snapshot.val() !== null) roomNames = snapshot.val();
+      document.getElementById('roomNameFloor4').innerText = roomNames.floor4 || "4階部室";
+      document.getElementById('roomNameFloor3').innerText = roomNames.floor3 || "3階部室";
+      document.getElementById('roomTitle').innerText = `${roomNames[currentRoom] || '4階部室'} 予約状況`;
+    });
+
+    db.ref('contactInfo').on('value', (snapshot) => {
+      contactText = snapshot.val() !== null ? snapshot.val() : "担当: 顧問または幹部\nTEL: (未設定)";
+      document.getElementById('contactDisplay').innerText = contactText;
+    });
+
+    db.ref('orgHeaderTitle').on('value', (snapshot) => {
+      orgHeaderTitle = snapshot.val() !== null ? snapshot.val() : "2026年度後期 大同高校 軽音楽部 幹部組織図";
+      document.getElementById('orgHeaderTitleText').innerText = orgHeaderTitle;
+    });
+
+    function switchRoom(roomKey) {
+      currentRoom = roomKey;
+      document.getElementById('roomTitle').innerText = `${roomNames[roomKey] || '部室'} 予約状況`;
+      document.getElementById('btnFloor4').classList.toggle('active', roomKey === 'floor4');
+      document.getElementById('btnFloor3').classList.toggle('active', roomKey === 'floor3');
+      renderTable();
+    }
+
+    function switchWeek(weekKey) {
+      currentWeek = weekKey;
+      document.getElementById('btnThisWeek').classList.toggle('active', weekKey === 'thisWeek');
+      document.getElementById('btnNextWeek').classList.toggle('active', weekKey === 'nextWeek');
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('timetableBody');
+      tbody.innerHTML = '';
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+
+      slots.forEach((item, idx) => {
+        const slotLabel = item.slotLabel || `コマ${idx + 1}`;
+        const slotKeyId = `コマ${idx + 1}`;
+        const tr = document.createElement('tr');
+        const tdTime = document.createElement('td');
+        tdTime.className = 'time-col';
+        tdTime.innerHTML = `<span>${slotLabel}</span><br>${item.nameA || 'A'}:${item.a}<br>${item.nameB || 'B'}:${item.b}<br>${item.nameAM || 'AM'}:${item.am}<br>${item.nameLong || '長期'}:${item.long}` +
+          `<button class="row-delete-btn" onclick="confirmDeleteTimeSlotRow(${idx}, event)">削除</button>`;
+        tdTime.onclick = () => { if (isAdmin || isMasterKeyLogin) openTimeModal(idx); };
+        tr.appendChild(tdTime);
+
+        days.forEach(day => {
+          const td = document.createElement('td');
+          td.className = 'slot';
+          const key = `${day}_${slotKeyId}`;
+          const bookedName = ((allReservations[currentRoom] || {})[currentWeek] || {})[key] || '';
+          if (bookedName) {
+            const isRegistered = registeredBands.some(b => b.name === bookedName);
+            if (!isRegistered || bookedName.includes("管理者") || bookedName === "管理者") {
+              td.classList.add('booked-admin');
+            } else {
+              td.classList.add('booked');
+            }
+            td.innerText = bookedName;
+          } else {
+            td.classList.add('free');
+            td.innerText = '-';
+          }
+          td.onclick = () => handleSlotClick(key, bookedName, idx);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleSlotClick(key, currentName, slotIdx) {
+      if (currentName) return; 
+      if (!currentLoginBand) { showInfoModal('予約エラー', 'ログインしてください。', true); return; }
+      targetBookingKey = key;
+      
+      const parts = key.split('_');
+      const dayCode = parts[0];
+      const dayFullStr = dayNames[dayCode] ? dayNames[dayCode] + '曜日' : dayCode;
+      
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+      const slotObj = slots[slotIdx] || { slotLabel: `コマ${slotIdx+1}`, a: '' };
+      
+      const roomDisplayName = roomNames[currentRoom] || '部室';
+      const detailString = `${roomDisplayName} / ${dayFullStr} / ${slotObj.slotLabel} (${slotObj.a || slotObj.b || ''})`;
+      
+      document.getElementById('bookingDetailText').innerText = detailString;
+      document.getElementById('bookingModalTitle').innerText = `📅 予約の確認`;
+      
+      const adminArea = document.getElementById('adminBookingNameArea');
+      if (isAdmin || isMasterKeyLogin) {
+        adminArea.style.display = 'block';
+        document.getElementById('inputAdminBookingName').value = currentLoginBand;
+        document.getElementById('bookingConfirmText').innerHTML = `予約名を確認・入力してください：`;
+      } else {
+        adminArea.style.display = 'none';
+        document.getElementById('bookingConfirmText').innerHTML = `「<b>${currentLoginBand}</b>」としてこの枠を予約しますか？`;
+      }
+      document.getElementById('bookingModal').style.display = 'flex';
+    }
+
+    function closeBookingModal() { document.getElementById('bookingModal').style.display = 'none'; }
+
+    function executeBooking() {
+      if (!targetBookingKey || !currentLoginBand) return;
+      let bookingName = currentLoginBand;
+      if (isAdmin || isMasterKeyLogin) {
+        const customName = document.getElementById('inputAdminBookingName').value.trim();
+        if (customName) bookingName = customName;
+      }
+
+      if (!isAdmin && !isMasterKeyLogin) {
+        let floor4Count = 0;
+        let floor3Count = 0;
+        const tw4 = (allReservations['floor4'] || {})[currentWeek] || {};
+        const tw3 = (allReservations['floor3'] || {})[currentWeek] || {};
+
+        Object.values(tw4).forEach(name => { if (name === bookingName) floor4Count++; });
+        Object.values(tw3).forEach(name => { if (name === bookingName) floor3Count++; });
+
+        const totalCount = floor4Count + floor3Count;
+
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const isAfterWednesday = (dayOfWeek >= 3 || dayOfWeek === 0);
+
+        if (totalCount >= 1) {
+          if (!isAfterWednesday) {
+            closeBookingModal();
+            showInfoModal('予約制限', '月曜・火曜日は4階・3階あわせて1コマまでしか予約できません。', true);
+            return;
+          } else {
+            if (totalCount >= 2) {
+              closeBookingModal();
+              showInfoModal('予約制限', '今週の予約上限（最大2コマ）に達しています。', true);
+              return;
+            }
+            if (currentRoom !== 'floor3') {
+              closeBookingModal();
+              showInfoModal('予約制限', '水曜日以降に追加で予約できるのは「3階部室」のみです。', true);
+              return;
+            }
+          }
+        }
+      }
+
+      db.ref(`reservations/${currentRoom}/${currentWeek}/${targetBookingKey}`).set(bookingName);
+      
+      if (registeredBands.some(b => b.name === bookingName)) {
+        const hist = bandActivityHistory[bookingName] || { term1: 0, term2: 0, term3: 0, total: 0 };
+        const nowTerm = currentActivityTerm === 'all' ? 'term1' : currentActivityTerm;
+        hist[nowTerm] = (hist[nowTerm] || 0) + 1;
+        hist.total = (hist.total || 0) + 1;
+        db.ref(`bandActivityHistory/${bookingName}`).set(hist);
+      }
+
+      closeBookingModal();
+      logAction(`${bookingName} が予約しました`);
+      showInfoModal('予約完了', '予約が完了しました。');
+    }
+
+    function openBandManageModal() { renderBandManageList(); document.getElementById('bandManageModal').style.display = 'flex'; }
+    function closeBandManageModal() { document.getElementById('bandManageModal').style.display = 'none'; }
+    function renderBandManageList() {
+      const container = document.getElementById('bandManageListContainer');
+      container.innerHTML = '';
+      registeredBands.forEach((bandObj, index) => {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <span><b>${bandObj.name}</b> <span style="color:var(--text-muted);">(PW: ${bandObj.pass})</span></span>
+          <div style="display:flex; gap:4px; flex-shrink:0;">
+            <button class="btn" style="background: var(--primary); color: white; padding: 3px 6px; font-size: 9px;" onclick="openBandStyleEditModal('${bandObj.name}')">名前・PW変更</button>
+            <button class="btn" style="background: var(--danger); color: white; padding: 3px 6px; font-size: 9px;" onclick="confirmDeleteBand(${index})">削除</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addNewBandWithPass() {
+      const nameVal = document.getElementById('newBandNameInput').value.trim();
+      const passVal = document.getElementById('newBandPassInput').value.trim();
+      if (!nameVal || !passVal) { showInfoModal('入力エラー', 'バンド名とパスワードを入力してください。', true); return; }
+      if (registeredBands.some(b => b.name === nameVal)) {
+        showInfoModal('入力エラー', '同じ名前のバンドがすでに登録されています。', true);
+        return;
+      }
+      registeredBands.push({ name: nameVal, pass: passVal, textColor: "#0f172a", bgColor: "#ffffff" });
+      db.ref('registeredBands').set(registeredBands);
+      document.getElementById('newBandNameInput').value = '';
+      document.getElementById('newBandPassInput').value = '';
+      renderBandManageList();
+      logAction(`バンド「${nameVal}」を追加しました`);
+      showInfoModal('追加完了', 'バンドを追加しました。');
+    }
+
+    function confirmDeleteBand(index) {
+      const target = registeredBands[index];
+      showCustomConfirm('バンドの削除', `バンド「${target.name}」を本当に削除しますか？`, () => {
+        registeredBands.splice(index, 1);
+        db.ref('registeredBands').set(registeredBands);
+        renderBandManageList();
+        logAction(`バンド「${target.name}」を削除しました`);
+        showInfoModal('削除完了', '削除しました。');
+      }, '削除', 'var(--danger)');
+    }
+
+    function openAddTimeSlotRowModal() {
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+      slots.push({ slotLabel: `コマ${slots.length + 1}`, nameA: 'A日課', a: '15:30-16:15', nameB: 'B日課', b: '15:00-15:50', nameAM: 'AM授業', am: '12:00-13:00', nameLong: '長期休業', long: '10:00-11:00' });
+      floorTimes[currentRoom] = slots;
+      db.ref('floorTimes').set(floorTimes);
+      logAction('時間割に行を追加しました');
+      showInfoModal('追加完了', 'コマ行を追加しました。');
+    }
+
+    function confirmDeleteTimeSlotRow(idx, event) {
+      event.stopPropagation();
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+      if (slots.length <= 1) { showInfoModal('エラー', 'これ以上減らせません。', true); return; }
+      showCustomConfirm('行の削除', 'このコマ行を本当に削除しますか？', () => {
+        slots.splice(idx, 1);
+        floorTimes[currentRoom] = slots;
+        db.ref('floorTimes').set(floorTimes);
+        logAction('時間割行を削除しました');
+        showInfoModal('削除完了', '削除しました。');
+      }, '削除', 'var(--danger)');
+    }
+
+    function openTimeModal(idx) {
+      editingTimeIdx = idx;
+      const item = (floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom])[idx];
+      document.getElementById('inputSlotLabel').value = item.slotLabel || `コマ${idx + 1}`;
+      document.getElementById('nameA').value = item.nameA || 'A日課';
+      document.getElementById('inputA').value = item.a || '';
+      document.getElementById('nameB').value = item.nameB || 'B日課';
+      document.getElementById('inputB').value = item.b || '';
+      document.getElementById('nameAM').value = item.nameAM || 'AM授業';
+      document.getElementById('inputAM').value = item.am || '';
+      document.getElementById('nameLong').value = item.nameLong || '長期休業';
+      document.getElementById('inputLong').value = item.long || '';
+      document.getElementById('timeModal').style.display = 'flex';
+    }
+    function closeTimeModal() { document.getElementById('timeModal').style.display = 'none'; }
+    function saveTimeModal() {
+      if (editingTimeIdx === null) return;
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+      slots[editingTimeIdx] = {
+        slotLabel: document.getElementById('inputSlotLabel').value.trim() || `コマ${editingTimeIdx + 1}`,
+        nameA: document.getElementById('nameA').value.trim() || 'A日課',
+        a: document.getElementById('inputA').value.trim(),
+        nameB: document.getElementById('nameB').value.trim() || 'B日課',
+        b: document.getElementById('inputB').value.trim(),
+        nameAM: document.getElementById('nameAM').value.trim() || 'AM授業',
+        am: document.getElementById('inputAM').value.trim(),
+        nameLong: document.getElementById('nameLong').value.trim() || '長期休業',
+        long: document.getElementById('inputLong').value.trim()
+      };
+      floorTimes[currentRoom] = slots;
+      db.ref('floorTimes').set(floorTimes);
+      closeTimeModal();
+      logAction('時間割を変更しました');
+      showInfoModal('保存完了', '変更を保存しました。');
+    }
+
+    function populateOrgCategorySelects() {
+      ['orgAddModalCategory', 'orgModalCategory'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const curVal = sel.value;
+        sel.innerHTML = '';
+        orgSectionMeta.forEach(sec => {
+          const opt = document.createElement('option');
+          opt.value = sec.key;
+          opt.innerText = sec.label;
+          sel.appendChild(opt);
+        });
+        sel.value = curVal;
+      });
+    }
+
+    function renderOrgBoxes() {
+      const container = document.getElementById('orgSectionsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      orgSectionMeta.forEach(sec => {
+        const sectionItems = currentOrgBoxes
+          .map((box, originalIndex) => ({ ...box, originalIndex }))
+          .filter(b => (b.category || 'exec') === sec.key);
+
+        if (sectionItems.length === 0 && !isAdmin && !isMasterKeyLogin) return;
+
+        const secWrap = document.createElement('div');
+        secWrap.className = 'org-section-wrapper';
+        secWrap.style.borderLeft = `4px solid ${sec.badgeColor}`;
+
+        const delSecBtn = document.createElement('button');
+        delSecBtn.className = 'section-delete-btn';
+        delSecBtn.innerText = '部門削除';
+        delSecBtn.onclick = (e) => {
+          e.stopPropagation();
+          confirmDeleteOrgSection(sec.key);
+        };
+        secWrap.appendChild(delSecBtn);
+
+        const badge = document.createElement('div');
+        badge.className = 'org-section-badge';
+        badge.style.backgroundColor = sec.badgeColor;
+        badge.innerText = sec.label;
+        secWrap.appendChild(badge);
+
+        const grid = document.createElement('div');
+        grid.className = `org-grid ${sec.cols || ''}`;
+
+        sectionItems.forEach(box => {
+          const idx = box.originalIndex;
+          const textColor = box.textColor || '#0f172a';
+          const borderColor = box.borderColor || sec.badgeColor;
+          const headerBg = box.headerBg || '#f8fafc';
+
+          const card = document.createElement('div');
+          card.className = 'org-box';
+          card.style.borderColor = borderColor;
+
+          card.innerHTML = `
+            <div class="org-box-header" style="background: ${headerBg}; border-bottom-color: ${borderColor};">${box.title}</div>
+            <div class="org-box-content ${box.isSmall ? 'small-text' : ''}" style="color: ${textColor};">${box.content}</div>
+            <div class="box-btn-group">
+              <input type="color" class="color-picker-input" value="${borderColor}" title="枠色" onclick="event.stopPropagation()" onchange="changeBorderColor(${idx}, this.value)">
+              <input type="color" class="color-picker-input" value="${headerBg}" title="背景" onclick="event.stopPropagation()" onchange="changeHeaderBgColor(${idx}, this.value)">
+              <input type="color" class="color-picker-input" value="${textColor}" title="文字色" onclick="event.stopPropagation()" onchange="changeTextColor(${idx}, this.value)">
+              <button class="edit-btn" onclick="openOrgModal(${idx})">編集</button>
+              <button class="delete-btn" onclick="confirmDeleteOrgBox(${idx})">削除</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        secWrap.appendChild(grid);
+        container.appendChild(secWrap);
+      });
+      populateOrgCategorySelects();
+    }
+
+    function openAddOrgSectionModal() {
+      document.getElementById('inputNewSectionLabel').value = '';
+      document.getElementById('inputNewSectionColor').value = '#2563eb';
+      document.getElementById('orgSectionAddModal').style.display = 'flex';
+    }
+    function closeAddOrgSectionModal() {
+      document.getElementById('orgSectionAddModal').style.display = 'none';
+    }
+    function executeAddOrgSection() {
+      const label = document.getElementById('inputNewSectionLabel').value.trim();
+      const color = document.getElementById('inputNewSectionColor').value;
+      if (!label) {
+        showInfoModal('エラー', '部門名を入力してください。', true);
+        return;
+      }
+      const newKey = 'sec_' + Date.now();
+      orgSectionMeta.push({ key: newKey, label: label, badgeColor: color, cols: '' });
+      db.ref('orgSectionMeta').set(orgSectionMeta);
+      closeAddOrgSectionModal();
+      logAction(`新しい部門「${label}」を追加しました`);
+      showInfoModal('追加完了', '新しい部門を追加しました。');
+    }
+
+    function confirmDeleteOrgSection(secKey) {
+      showCustomConfirm('部門の削除', 'この部門と、所属するすべてのカードを削除しますか？', () => {
+        orgSectionMeta = orgSectionMeta.filter(s => s.key !== secKey);
+        currentOrgBoxes = currentOrgBoxes.filter(b => b.category !== secKey);
+        db.ref('orgSectionMeta').set(orgSectionMeta);
+        db.ref('orgBoxes').set(currentOrgBoxes);
+        logAction('組織図の部門を削除しました');
+        showInfoModal('削除完了', '部門を削除しました。');
+      }, '削除', 'var(--danger)');
+    }
+
+    function confirmResetOrgToDefault() {
+      showCustomConfirm('組織図の初期化', '最新の組織図データにリセットしますか？', () => {
+        currentOrgBoxes = JSON.parse(JSON.stringify(defaultOrgBoxes));
+        orgSectionMeta = JSON.parse(JSON.stringify(defaultOrgSectionMeta));
+        db.ref('orgBoxes').set(currentOrgBoxes);
+        db.ref('orgSectionMeta').set(orgSectionMeta);
+        db.ref('orgHeaderTitle').set("2026年度後期 大同高校 軽音楽部 幹部組織図");
+        logAction('組織図を最新データにリセットしました');
+        showInfoModal('完了', '組織図をリセットしました。');
+      }, 'リセット', 'var(--primary)');
+    }
+
+    function openOrgModal(index) {
+      editingOrgIdx = index;
+      document.getElementById('orgModalCategory').value = currentOrgBoxes[index].category || 'exec';
+      document.getElementById('orgModalTitle').value = currentOrgBoxes[index].title;
+      document.getElementById('orgModalContent').value = currentOrgBoxes[index].content;
+      document.getElementById('orgModal').style.display = 'flex';
+    }
+    function closeOrgModal() { document.getElementById('orgModal').style.display = 'none'; }
+    function saveOrgModal() {
+      if (editingOrgIdx === null) return;
+      currentOrgBoxes[editingOrgIdx].category = document.getElementById('orgModalCategory').value;
+      currentOrgBoxes[editingOrgIdx].title = document.getElementById('orgModalTitle').value.trim();
+      currentOrgBoxes[editingOrgIdx].content = document.getElementById('orgModalContent').value.trim();
+      db.ref('orgBoxes').set(currentOrgBoxes);
+      closeOrgModal();
+      logAction('組織図を更新しました');
+      showInfoModal('保存完了', '組織図を更新しました。');
+    }
+
+    function changeTextColor(index, colorHex) { currentOrgBoxes[index].textColor = colorHex; db.ref('orgBoxes').set(currentOrgBoxes); }
+    function changeBorderColor(index, colorHex) { currentOrgBoxes[index].borderColor = colorHex; db.ref('orgBoxes').set(currentOrgBoxes); }
+    function changeHeaderBgColor(index, colorHex) { currentOrgBoxes[index].headerBg = colorHex; db.ref('orgBoxes').set(currentOrgBoxes); }
+
+    function openOrgUnifiedColorModal() { document.getElementById('orgUnifiedColorModal').style.display = 'flex'; }
+    function closeOrgUnifiedColorModal() { document.getElementById('orgUnifiedColorModal').style.display = 'none'; }
+    function executeUnifiedOrgColor() {
+      const val = document.getElementById('inputUnifiedColor').value;
+      currentOrgBoxes.forEach(box => box.borderColor = val);
+      db.ref('orgBoxes').set(currentOrgBoxes);
+      closeOrgUnifiedColorModal();
+      logAction('組織図の枠色を一括変更しました');
+      showInfoModal('完了', '枠色を一括変更しました。');
+    }
+    function executeResetInitialOrgColor() {
+      currentOrgBoxes = currentOrgBoxes.map((box) => {
+        box.borderColor = '#2563eb';
+        box.headerBg = '#f8fafc';
+        return box;
+      });
+      db.ref('orgBoxes').set(currentOrgBoxes);
+      closeOrgUnifiedColorModal();
+      showInfoModal('完了', '初期色に戻しました。');
+    }
+
+    function confirmDeleteOrgBox(index) {
+      const target = currentOrgBoxes[index];
+      showCustomConfirm('項目の削除', `「${target.title}」を本当に削除しますか？`, () => {
+        currentOrgBoxes.splice(index, 1);
+        db.ref('orgBoxes').set(currentOrgBoxes);
+        logAction('組織図の項目を削除しました');
+        showInfoModal('削除完了', '削除しました。');
+      }, '削除', 'var(--danger)');
+    }
+
+    function openAddOrgModal() {
+      document.getElementById('orgAddModalTitle').value = '';
+      document.getElementById('orgAddModalContent').value = '';
+      document.getElementById('orgAddModal').style.display = 'flex';
+    }
+    function closeAddOrgModal() { document.getElementById('orgAddModal').style.display = 'none'; }
+    function executeAddOrgBox() {
+      const cat = document.getElementById('orgAddModalCategory').value;
+      const title = document.getElementById('orgAddModalTitle').value.trim();
+      const content = document.getElementById('orgAddModalContent').value.trim();
+      if (!title) { showInfoModal('エラー', 'タイトルを入力してください。', true); return; }
+      const meta = orgSectionMeta.find(m => m.key === cat) || { badgeColor: '#2563eb' };
+      currentOrgBoxes.push({ id: 'box_' + Date.now(), category: cat, title, content, headerBg: '#f8fafc', textColor: '#0f172a', borderColor: meta.badgeColor });
+      db.ref('orgBoxes').set(currentOrgBoxes);
+      closeAddOrgModal();
+      logAction('組織図に項目を追加しました');
+      showInfoModal('追加完了', '追加しました。');
+    }
+
+    function openOrgHeaderModal() { document.getElementById('orgHeaderInput').value = orgHeaderTitle; document.getElementById('orgHeaderModal').style.display = 'flex'; }
+    function closeOrgHeaderModal() { document.getElementById('orgHeaderModal').style.display = 'none'; }
+    function saveOrgHeaderModal() {
+      const val = document.getElementById('orgHeaderInput').value.trim();
+      if (!val) return;
+      db.ref('orgHeaderTitle').set(val);
+      closeOrgHeaderModal();
+      logAction('組織図タイトルを変更しました');
+      showInfoModal('保存完了', '変更しました。');
+    }
+
+    function openCancelModal() {
+      const container = document.getElementById('cancelListContainer');
+      container.innerHTML = '';
+      const weekData = (allReservations[currentRoom] || {})[currentWeek] || {};
+      const slots = floorTimes[currentRoom] || defaultFloorTimesStruct[currentRoom];
+      let count = 0;
+      slots.forEach((item, i) => {
+        const slotLabel = item.slotLabel || `コマ${i + 1}`;
+        const slotKeyId = `コマ${i + 1}`;
+        days.forEach(day => {
+          const key = `${day}_${slotKeyId}`;
+          if (weekData[key]) {
+            count++;
+            const bandName = weekData[key];
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `<span><b>${dayNames[day]}曜 ${slotLabel}</b> : ${bandName}</span><button class="btn" style="background: var(--danger); color: white; padding: 2px 4px; font-size: 9px;" onclick="confirmCancelReservation('${key}', '${bandName}')">取消</button>`;
+            container.appendChild(div);
+          }
+        });
+      });
+      if (count === 0) container.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 11px; padding: 8px;">予約はありません。</p>';
+      document.getElementById('cancelModal').style.display = 'flex';
+    }
+    function closeCancelModal() { document.getElementById('cancelModal').style.display = 'none'; }
+
+    function confirmCancelReservation(key, bandName) {
+      showCustomConfirm('予約の取消', `「${bandName}」の予約を本当に取り消しますか？`, () => {
+        db.ref(`reservations/${currentRoom}/${currentWeek}/${key}`).remove();
+        openCancelModal();
+        logAction('予約を取り消しました');
+        showInfoModal('完了', '取り消しました。');
+      }, '取消', 'var(--danger)');
+    }
+
+    function confirmResetCurrentWeek() {
+      showCustomConfirm('今週の全リセット', '今週の全予約を本当にリセットしますか？', () => {
+        db.ref(`reservations/${currentRoom}/${currentWeek}`).remove();
+        logAction('今週の全予約をリセットしました');
+        showInfoModal('完了', 'リセットしました。');
+      }, 'リセット', 'var(--danger)');
+    }
+
+    function openContactModal() { document.getElementById('contactTextarea').value = contactText; document.getElementById('contactModal').style.display = 'flex'; }
+    function closeContactModal() { document.getElementById('contactModal').style.display = 'none'; }
+    function saveContactModal() {
+      const val = document.getElementById('contactTextarea').value.trim();
+      db.ref('contactInfo').set(val);
+      closeContactModal();
+      logAction('お問い合わせ先を変更しました');
+      showInfoModal('保存完了', '保存しました。');
+    }
+
+    function renderActivityView() {
+      const tbody = document.getElementById('activityTableBody');
+      if (!tbody) return;
+
+      const dateBannerEl = document.getElementById('displayTermDateRange');
+      if (dateBannerEl) {
+        dateBannerEl.innerText = termDateRanges[currentActivityTerm] || termDateRanges.all;
+      }
+
+      let totalThisWeek = 0;
+      let totalSelectedTerm = 0;
+
+      const bandStats = registeredBands.map(bandObj => {
+        const name = bandObj.name;
+        let thisWeekCount = 0;
+        let nextWeekCount = 0;
+
+        ['floor4', 'floor3'].forEach(roomKey => {
+          const tw = (allReservations[roomKey] || {}).thisWeek || {};
+          const nw = (allReservations[roomKey] || {}).nextWeek || {};
+          Object.values(tw).forEach(bName => { if (bName === name) thisWeekCount++; });
+          Object.values(nw).forEach(bName => { if (bName === name) nextWeekCount++; });
+        });
+
+        const hist = bandActivityHistory[name] || { term1: 0, term2: 0, term3: 0, total: 0 };
+        
+        let displayCount = hist.total || 0;
+        if (currentActivityTerm === 'term1') displayCount = hist.term1 || 0;
+        if (currentActivityTerm === 'term2') displayCount = hist.term2 || 0;
+        if (currentActivityTerm === 'term3') displayCount = hist.term3 || 0;
+
+        totalThisWeek += thisWeekCount;
+        totalSelectedTerm += displayCount;
+
+        return { name, textColor: bandObj.textColor || '#0f172a', bgColor: bandObj.bgColor || '#ffffff', thisWeekCount, nextWeekCount, displayCount, total: hist.total || 0 };
+      });
+
+      bandStats.sort((a, b) => b.displayCount - a.displayCount || b.thisWeekCount - a.thisWeekCount);
+
+      document.getElementById('statTotalBands').innerText = `${registeredBands.length}`;
+      document.getElementById('statThisWeekTotal').innerText = `${totalThisWeek}`;
+      document.getElementById('statAllTimeTotal').innerText = `${totalSelectedTerm}`;
+
+      const maxCount = Math.max(...bandStats.map(s => s.displayCount), 1);
+      tbody.innerHTML = '';
+
+      if (bandStats.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color: var(--text-muted); padding: 12px;">登録バンドがありません。</td></tr>';
+        return;
+      }
+
+      bandStats.forEach((stat, idx) => {
+        const tr = document.createElement('tr');
+        tr.style.backgroundColor = stat.bgColor;
+        const percent = Math.round((stat.displayCount / maxCount) * 100);
+        let badgeHtml = '<span class="badge-low">少なめ</span>';
+        if (stat.thisWeekCount >= 2 || stat.displayCount >= 5) badgeHtml = '<span class="badge-active">活発</span>';
+        else if (stat.thisWeekCount >= 1 || stat.displayCount >= 2) badgeHtml = '<span class="badge-normal">標準</span>';
+
+        const rankPrefix = idx === 0 && stat.displayCount > 0 ? '[1位] ' : '';
+
+        tr.innerHTML = `
+          <td style="text-align: left; padding-left: 6px; color: ${stat.textColor};">
+            <b>${rankPrefix}${stat.name}</b>
+            <button class="activity-admin-btn" onclick="openBandStyleEditModal('${stat.name}')">編集</button>
+          </td>
+          <td style="color: ${stat.textColor};"><b>${stat.thisWeekCount}</b></td>
+          <td style="color: ${stat.textColor};"><b>${stat.nextWeekCount}</b></td>
+          <td style="color: ${stat.textColor};">
+            <b>${stat.displayCount}</b>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${percent}%;"></div></div>
+          </td>
+          <td>${badgeHtml}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openActivityManageModal() {
+      document.getElementById('modalTermSelect').value = currentActivityTerm;
+      renderActivityManageList();
+      document.getElementById('activityManageModal').style.display = 'flex';
+    }
+    function closeActivityManageModal() { document.getElementById('activityManageModal').style.display = 'none'; }
+
+    function changeActiveTermSetting(val) {
+      currentActivityTerm = val;
+      document.getElementById('selectActiveTerm').value = val;
+      renderActivityView();
+      renderActivityManageList();
+    }
+
+    function renderActivityManageList() {
+      const container = document.getElementById('activityManageListContainer');
+      container.innerHTML = '';
+      registeredBands.forEach(band => {
+        const hist = bandActivityHistory[band.name] || { term1: 0, term2: 0, term3: 0, total: 0 };
+        const termKey = currentActivityTerm === 'all' ? 'total' : currentActivityTerm;
+        const currentCount = hist[termKey] || 0;
+
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <span><b>${band.name}</b> : ${currentActivityTerm === 'all' ? '累計' : currentActivityTerm} <b>${currentCount}</b> 回</span>
+          <div style="display: flex; gap: 4px;">
+            <button class="btn" style="background: var(--success); color: white; padding: 2px 6px; font-size: 10px;" onclick="adjustTermActivityCount('${band.name}', 1)">+1</button>
+            <button class="btn" style="background: var(--danger); color: white; padding: 2px 6px; font-size: 10px;" onclick="adjustTermActivityCount('${band.name}', -1)">-1</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function adjustTermActivityCount(bandName, delta) {
+      const hist = bandActivityHistory[bandName] || { term1: 0, term2: 0, term3: 0, total: 0 };
+      const termKey = currentActivityTerm === 'all' ? 'total' : currentActivityTerm;
+      hist[termKey] = Math.max(0, (hist[termKey] || 0) + delta);
+      if (currentActivityTerm !== 'all') {
+        let sum = (hist.term1 || 0) + (hist.term2 || 0) + (hist.term3 || 0);
+        hist.total = sum;
+      }
+      bandActivityHistory[bandName] = hist;
+      db.ref(`bandActivityHistory/${bandName}`).set(hist);
+      renderActivityManageList();
+      renderActivityView();
+      logAction(`バンド「${bandName}」の活動数を調整しました`);
+    }
+
+    function confirmResetCurrentTermActivityCounts() {
+      showCustomConfirm('活動数のリセット', `選択中の期間の回数をすべて0にリセットしますか？`, () => {
+        registeredBands.forEach(band => {
+          const hist = bandActivityHistory[band.name] || { term1: 0, term2: 0, term3: 0, total: 0 };
+          if (currentActivityTerm === 'all') {
+            hist.term1 = 0; hist.term2 = 0; hist.term3 = 0; hist.total = 0;
+          } else {
+            hist[currentActivityTerm] = 0;
+            hist.total = (hist.term1 || 0) + (hist.term2 || 0) + (hist.term3 || 0);
+          }
+          db.ref(`bandActivityHistory/${band.name}`).set(hist);
+        });
+        renderActivityManageList();
+        renderActivityView();
+        logAction('活動数をリセットしました');
+        showInfoModal('完了', 'リセットしました。');
+      }, 'リセット', 'var(--danger)');
+    }
+  </script>
+</body>
+</html>
